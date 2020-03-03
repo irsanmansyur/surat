@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 03, 2020 at 01:43 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.3.14
+-- Waktu pembuatan: 03 Mar 2020 pada 20.46
+-- Versi server: 10.4.10-MariaDB
+-- Versi PHP: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_divisi`
+-- Struktur dari tabel `mst_divisi`
 --
 
 CREATE TABLE `mst_divisi` (
@@ -34,7 +34,7 @@ CREATE TABLE `mst_divisi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_divisi`
+-- Dumping data untuk tabel `mst_divisi`
 --
 
 INSERT INTO `mst_divisi` (`id_divisi`, `nama_divisi`) VALUES
@@ -45,7 +45,7 @@ INSERT INTO `mst_divisi` (`id_divisi`, `nama_divisi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_jabatan`
+-- Struktur dari tabel `mst_jabatan`
 --
 
 CREATE TABLE `mst_jabatan` (
@@ -55,7 +55,7 @@ CREATE TABLE `mst_jabatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_jabatan`
+-- Dumping data untuk tabel `mst_jabatan`
 --
 
 INSERT INTO `mst_jabatan` (`id_jabatan`, `nama_jabatan`, `id_divisi`) VALUES
@@ -66,7 +66,7 @@ INSERT INTO `mst_jabatan` (`id_jabatan`, `nama_jabatan`, `id_divisi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_kat_surat`
+-- Struktur dari tabel `mst_kat_surat`
 --
 
 CREATE TABLE `mst_kat_surat` (
@@ -75,7 +75,7 @@ CREATE TABLE `mst_kat_surat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_kat_surat`
+-- Dumping data untuk tabel `mst_kat_surat`
 --
 
 INSERT INTO `mst_kat_surat` (`id_kat_surat`, `kategori`) VALUES
@@ -85,29 +85,30 @@ INSERT INTO `mst_kat_surat` (`id_kat_surat`, `kategori`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_surat`
+-- Struktur dari tabel `mst_surat`
 --
 
 CREATE TABLE `mst_surat` (
   `id_surat` int(11) NOT NULL,
   `kode_surat` text NOT NULL,
   `kategori_surat` text NOT NULL,
-  `jenis_surat` text NOT NULL
+  `jenis_surat` text NOT NULL,
+  `berkas_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_surat`
+-- Dumping data untuk tabel `mst_surat`
 --
 
-INSERT INTO `mst_surat` (`id_surat`, `kode_surat`, `kategori_surat`, `jenis_surat`) VALUES
-(1, 'SUR-032020001', 'Surat Masuk', 'Dari instansi luar'),
-(2, 'SUR-032020002', 'Surat Keluar', 'Untuk Internal'),
-(3, 'SUR-032020003', 'Surat Keluar', 'Untuk External');
+INSERT INTO `mst_surat` (`id_surat`, `kode_surat`, `kategori_surat`, `jenis_surat`, `berkas_id`) VALUES
+(1, '03032020/001', 'Surat Masuk', 'Dari instansi luar', 1),
+(2, '03032020/002', 'Surat Keluar', 'Untuk Internal', 2),
+(3, '03032020/003', 'Surat Keluar', 'Untuk External', 3);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mst_user`
+-- Struktur dari tabel `mst_user`
 --
 
 CREATE TABLE `mst_user` (
@@ -124,7 +125,7 @@ CREATE TABLE `mst_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `mst_user`
+-- Dumping data untuk tabel `mst_user`
 --
 
 INSERT INTO `mst_user` (`id`, `nama`, `email`, `username`, `password`, `level`, `image`, `date_created`, `is_active`, `nip`) VALUES
@@ -135,7 +136,7 @@ INSERT INTO `mst_user` (`id`, `nama`, `email`, `username`, `password`, `level`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_berkas`
+-- Struktur dari tabel `tb_berkas`
 --
 
 CREATE TABLE `tb_berkas` (
@@ -163,7 +164,7 @@ CREATE TABLE `tb_berkas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_berkas`
+-- Dumping data untuk tabel `tb_berkas`
 --
 
 INSERT INTO `tb_berkas` (`id_berkas`, `sess_id`, `kd_berkas`, `tuj_berkas`, `nama_berkas`, `tgl_berkas`, `pesan`, `file_upload`, `status_berkas`, `jenis_surat`, `perihal`, `tembusan`, `id_template`, `sifat`, `lampiran`, `nama_penerima`, `ttd`, `nip_penerima`, `jabatan`, `pangkat`, `telpon`) VALUES
@@ -174,7 +175,7 @@ INSERT INTO `tb_berkas` (`id_berkas`, `sess_id`, `kd_berkas`, `tuj_berkas`, `nam
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_chat`
+-- Struktur dari tabel `tb_chat`
 --
 
 CREATE TABLE `tb_chat` (
@@ -185,17 +186,18 @@ CREATE TABLE `tb_chat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_chat`
+-- Dumping data untuk tabel `tb_chat`
 --
 
 INSERT INTO `tb_chat` (`id_chat`, `id_divisi`, `pesan`, `hash`) VALUES
 (1, 2, 'gus rapat', 58790083),
-(2, 2, 'iyo mas', 58790083);
+(2, 2, 'iyo mas', 58790083),
+(3, 2, 'fffff', 58790083);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_notif`
+-- Struktur dari tabel `tb_notif`
 --
 
 CREATE TABLE `tb_notif` (
@@ -209,7 +211,7 @@ CREATE TABLE `tb_notif` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_notif`
+-- Dumping data untuk tabel `tb_notif`
 --
 
 INSERT INTO `tb_notif` (`id_notif`, `pesan`, `id_divisi`, `waktu`, `status_baca`, `id_berkas`, `id_chat`) VALUES
@@ -224,7 +226,7 @@ INSERT INTO `tb_notif` (`id_notif`, `pesan`, `id_divisi`, `waktu`, `status_baca`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_notif_chat`
+-- Struktur dari tabel `tb_notif_chat`
 --
 
 CREATE TABLE `tb_notif_chat` (
@@ -236,17 +238,18 @@ CREATE TABLE `tb_notif_chat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_notif_chat`
+-- Dumping data untuk tabel `tb_notif_chat`
 --
 
 INSERT INTO `tb_notif_chat` (`id_nchat`, `hash`, `pesan`, `id_divisi`, `status_baca`) VALUES
 (1, 58790083, 'gus rapat', 2, 1),
-(2, 58790083, 'iyo mas', 2, 1);
+(2, 58790083, 'iyo mas', 2, 1),
+(3, 58790083, 'fffff', 2, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_struktural`
+-- Struktur dari tabel `tb_struktural`
 --
 
 CREATE TABLE `tb_struktural` (
@@ -259,7 +262,7 @@ CREATE TABLE `tb_struktural` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tb_struktural`
+-- Dumping data untuk tabel `tb_struktural`
 --
 
 INSERT INTO `tb_struktural` (`id_struktur`, `user_id`, `kode_pegawai`, `nama_pegawai`, `jabatan_nm`, `divisi_nm`) VALUES
@@ -269,7 +272,7 @@ INSERT INTO `tb_struktural` (`id_struktur`, `user_id`, `kode_pegawai`, `nama_peg
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_surat`
+-- Struktur dari tabel `tb_surat`
 --
 
 CREATE TABLE `tb_surat` (
@@ -289,137 +292,137 @@ CREATE TABLE `tb_surat` (
 --
 
 --
--- Indexes for table `mst_divisi`
+-- Indeks untuk tabel `mst_divisi`
 --
 ALTER TABLE `mst_divisi`
   ADD PRIMARY KEY (`id_divisi`);
 
 --
--- Indexes for table `mst_jabatan`
+-- Indeks untuk tabel `mst_jabatan`
 --
 ALTER TABLE `mst_jabatan`
   ADD PRIMARY KEY (`id_jabatan`);
 
 --
--- Indexes for table `mst_kat_surat`
+-- Indeks untuk tabel `mst_kat_surat`
 --
 ALTER TABLE `mst_kat_surat`
   ADD PRIMARY KEY (`id_kat_surat`);
 
 --
--- Indexes for table `mst_surat`
+-- Indeks untuk tabel `mst_surat`
 --
 ALTER TABLE `mst_surat`
   ADD PRIMARY KEY (`id_surat`);
 
 --
--- Indexes for table `mst_user`
+-- Indeks untuk tabel `mst_user`
 --
 ALTER TABLE `mst_user`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tb_berkas`
+-- Indeks untuk tabel `tb_berkas`
 --
 ALTER TABLE `tb_berkas`
   ADD PRIMARY KEY (`id_berkas`);
 
 --
--- Indexes for table `tb_chat`
+-- Indeks untuk tabel `tb_chat`
 --
 ALTER TABLE `tb_chat`
   ADD PRIMARY KEY (`id_chat`);
 
 --
--- Indexes for table `tb_notif`
+-- Indeks untuk tabel `tb_notif`
 --
 ALTER TABLE `tb_notif`
   ADD PRIMARY KEY (`id_notif`);
 
 --
--- Indexes for table `tb_notif_chat`
+-- Indeks untuk tabel `tb_notif_chat`
 --
 ALTER TABLE `tb_notif_chat`
   ADD PRIMARY KEY (`id_nchat`);
 
 --
--- Indexes for table `tb_struktural`
+-- Indeks untuk tabel `tb_struktural`
 --
 ALTER TABLE `tb_struktural`
   ADD PRIMARY KEY (`id_struktur`);
 
 --
--- Indexes for table `tb_surat`
+-- Indeks untuk tabel `tb_surat`
 --
 ALTER TABLE `tb_surat`
   ADD PRIMARY KEY (`id_tb_surat`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `mst_divisi`
+-- AUTO_INCREMENT untuk tabel `mst_divisi`
 --
 ALTER TABLE `mst_divisi`
   MODIFY `id_divisi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `mst_jabatan`
+-- AUTO_INCREMENT untuk tabel `mst_jabatan`
 --
 ALTER TABLE `mst_jabatan`
   MODIFY `id_jabatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `mst_kat_surat`
+-- AUTO_INCREMENT untuk tabel `mst_kat_surat`
 --
 ALTER TABLE `mst_kat_surat`
   MODIFY `id_kat_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `mst_surat`
+-- AUTO_INCREMENT untuk tabel `mst_surat`
 --
 ALTER TABLE `mst_surat`
-  MODIFY `id_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `mst_user`
+-- AUTO_INCREMENT untuk tabel `mst_user`
 --
 ALTER TABLE `mst_user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `tb_berkas`
+-- AUTO_INCREMENT untuk tabel `tb_berkas`
 --
 ALTER TABLE `tb_berkas`
   MODIFY `id_berkas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `tb_chat`
+-- AUTO_INCREMENT untuk tabel `tb_chat`
 --
 ALTER TABLE `tb_chat`
-  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_chat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `tb_notif`
+-- AUTO_INCREMENT untuk tabel `tb_notif`
 --
 ALTER TABLE `tb_notif`
   MODIFY `id_notif` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `tb_notif_chat`
+-- AUTO_INCREMENT untuk tabel `tb_notif_chat`
 --
 ALTER TABLE `tb_notif_chat`
-  MODIFY `id_nchat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_nchat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `tb_struktural`
+-- AUTO_INCREMENT untuk tabel `tb_struktural`
 --
 ALTER TABLE `tb_struktural`
   MODIFY `id_struktur` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `tb_surat`
+-- AUTO_INCREMENT untuk tabel `tb_surat`
 --
 ALTER TABLE `tb_surat`
   MODIFY `id_tb_surat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
