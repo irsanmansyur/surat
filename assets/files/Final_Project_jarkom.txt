@@ -1,0 +1,36 @@
+final project jarkomdat
+buatlah simulasi jaringan komputer menggunakan packet tracer
+atau menggunakan alat langsung
+misalnya dengan judul : "simulasi jaringan cafe kenangan mantan terindah"
+** di kerjakan sendiri² **
+** tiap mahasiswa judul harus berbeda **
+
+dengan type project simulasi
+A. terdiri dari
+   - 1 DHCP Server
+   - 1 switch/hub
+   - 6 pc/laptop client dengan kabel
+   - jaringan dengan ip class C
+
+B. terdiri dari
+   - 2 DHCP Server
+   - 2 router
+   - 1 switch/hub
+   - 1 access point
+   - 5 pc/laptop client dengan kabel
+   - 5 laptop/smartphone dengan wireless
+   - 2 jaringan dengan ip class C
+   - 1 jaringan dengan ip class B
+
+jika dengan alat langsung
+A. buatlah sebuah jaringan internet terdiri dari
+   - 1 modem internet 4G
+   - 1 wifi router 4G
+   - jaringan dengan ip class C
+   - maximal user yang bisa connect hanya 6 (laptop/smartphone)
+
+**dengan syarat & ketentuan berlaku**
+1. di presentasikan pada pertemuan ke 14 
+2. type project simulasi A -> Nilai Maximal 62
+   type project simulasi B -> Nilai Maximal 84
+   type project alat -> Gak usah ikut kuis sesi ke 2 & UAS nilai otomatis A (ttd aja) ^__^   

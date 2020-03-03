@@ -1,0 +1,13 @@
+1. fitur chat belum sempurna. 
+   - tambahkan notifikasi ketika ada chat masuk
+   - chat di kirim oleh siapa ?
+   - untuk membalas chat harus memilih tujuan dahulu (harusnya bisa langsung)
+2. upload berkas tidak bisa diupload ketika create surat, jika di edit berkas bisa masuk
+3. ketika di print preview desain surat masih acak²an jika isi pesan sedikit
+4. ketika klik notifikasi ada surat masuk. harusnya redirect ke berkas_masuk bukan ke list_berkas lagi
+5. footer tidak rapi ketika di klik daftar berkas, berkas masuk, dan laporan laporan
+   (harusnya posisi bottom seperti pada dashboard)
+6. jika di edit sebelum di kirim isi surat tidak tampil ketika di print
+7. jika di kirim surat tanpa berkas surat di terima oleh penerima, jika di kirim dengan berkas kenapa tidak ada masuk ?
+8. pada tabel daftar berkas kolom tujuan berkas harusnya nama divisi (gambar terlampir)
+
