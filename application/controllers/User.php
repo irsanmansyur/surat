@@ -21,8 +21,14 @@ class User extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $data['title'] = 'Beranda';
             $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-            $data['kirim_surat'] = $this->user->countKirimSurat();
-            $data['total_surat'] = $this->user->countTotalSurat();
+
+
+            $tbSuratMasuk = $this->db->get_where("mst_surat", ["kategori_surat" => "Surat Keluar"]);
+            $data['total_surat_keluar'] = $tbSuratMasuk->num_rows();
+
+            $tbSuratKeluar = $this->db->get_where("mst_surat", ["kategori_surat" => "Surat Masuk"]);
+            $data['total_surat_masuk'] = $tbSuratMasuk->num_rows();
+
             $data['kirim_berkas'] = $this->user->countKirimBerkas();
             $data['total_berkas'] = $this->user->countTotalBerkas();
             $data['kd_surat'] = $this->user->getKdSurat();
@@ -34,7 +40,7 @@ class User extends CI_Controller
             $this->load->view('templates/sidebar_user', $data);
             $this->load->view('templates/navbar', $data);
             $this->load->view('user/index', $data);
-            
+
             $this->load->view('templates/footer');
         } else {
             $sess_id = $this->session->userdata('id');
@@ -77,7 +83,7 @@ class User extends CI_Controller
             $this->load->view('user/index', $data);
             $this->load->view('templates/footer');
         } else {
-         /*   $upload_file = $_FILES['ttd']['name'];
+            /*   $upload_file = $_FILES['ttd']['name'];
              $config['allowed_types'] = 'jpg|png|jpeg|xls|xlsx|doc|docx|ppt|pptx|pdf|zip|rar|txt';
                 $config['max_size']     = '100048';
                 $config['upload_path'] = './assets/files/';
@@ -93,11 +99,11 @@ class User extends CI_Controller
  
    $this->upload->do_upload('file');
          $ttd=$this->upload->data(); */
-      
-        
-            
-        
-        /*    $file = $this->upload->data();
+
+
+
+
+            /*    $file = $this->upload->data();
             $config['upload_path']          = './assets/files';
             $config8['allowed_types']        = 'gif|jpg|png|pdf';
         $config8['max_size']             = 10048;
@@ -108,82 +114,81 @@ class User extends CI_Controller
         
             $this->upload->do_upload('ttd');
             $ttd=$this->upload->data(); */
-        
 
-           // if ($upload_file) {
-            if ($_FILES['fileku']['name']=="") {
-                 $sess_id = $this->session->userdata('id');
-                    $data = array(
-                        'kd_berkas' => $this->input->post('kd_berkas', true),
-                        'tuj_berkas' => $this->input->post('tuj_berkas', true),
-                        'nama_berkas' => $this->input->post('nama_berkas', true),
-                        'tgl_berkas' => $this->input->post('tgl_berkas', true),
-                        'pesan' => $this->input->post('pesan', true),
-                        'sess_id' => $sess_id,
-                        'status_berkas' => 1,
-                        'jenis_surat'=>$this->input->post('jenis_surat'),
-                        'perihal'=>$this->input->post('perihal'),
-                        'tembusan'=>$this->input->post('tembusan'),
-                        'sifat'=>$this->input->post('sifat'),
-                        'lampiran'=>$this->input->post('lampiran'),
-                        'id_template'=>$this->input->post('template'),
-                        //'ttd'=>$ttd['file_name'],
-                        'nama_penerima'=>$this->input->post('nama_penerima'),
-                        'nip_penerima'=>$this->input->post('nip_penerima'),
-                        'jabatan'=>$this->input->post('jabatan'),
-                        'pangkat'=>$this->input->post('pangkat')
-                        
-                    );
-                    
-            }else{
-                 //$upload_file = $_FILES['file']['name'];
-             
-                
-        $config['allowed_types']='xls|xlsx|doc|docx|ppt|pptx|pdf|zip|rar|txt';
-        $config['max_size']=100048;
-         $config['upload_path']='./assets/files';
-       // $config['max_width']            = 2048;
-       // $config['max_height']           = 2048;
- 
-        $this->load->library('upload', $config);
- 
-     $this->upload->do_upload('fileku');
-      $file=$this->upload->data();
-                    $sess_id = $this->session->userdata('id');
-                    $data = array(
-                        'kd_berkas' => $this->input->post('kd_berkas', true),
-                        'tuj_berkas' => $this->input->post('tuj_berkas', true),
-                        'nama_berkas' => $this->input->post('nama_berkas', true),
-                        'tgl_berkas' => $this->input->post('tgl_berkas', true),
-                        'pesan' => $this->input->post('pesan', true),
-                        'sess_id' => $sess_id,
-                        'status_berkas' => 1,
-                        'file_upload' => $file['file_name'],
-                         'jenis_surat'=>$this->input->post('jenis_surat'),
-                        'perihal'=>$this->input->post('perihal'),
-                        'tembusan'=>$this->input->post('tembusan'),
-                         'sifat'=>$this->input->post('sifat'),
-                        'lampiran'=>$this->input->post('lampiran'),
-                         'id_template'=>$this->input->post('template'),
-                         //'ttd'=>$ttd['file_name'],
-                          'nama_penerima'=>$this->input->post('nama_penerima'),
-                        'nip_penerima'=>$this->input->post('nip_penerima'),
-                        'jabatan'=>$this->input->post('jabatan'),
-                        'pangkat'=>$this->input->post('pangkat')
-                    );
-                   
-               // } else {
-                   // $this->session->set_flashdata('msg', '<div class="alert alert-danger font-weight-bolder" role="alert">UPLOAD GAGAL !..  Ekstensi File Salah / Ukuran file tidak boleh dari 2 mb</div>');
-                   // redirect('user/index');
-               // }
+
+            // if ($upload_file) {
+            if ($_FILES['fileku']['name'] == "") {
+                $sess_id = $this->session->userdata('id');
+                $data = array(
+                    'kd_berkas' => $this->input->post('kd_berkas', true),
+                    'tuj_berkas' => $this->input->post('tuj_berkas', true),
+                    'nama_berkas' => $this->input->post('nama_berkas', true),
+                    'tgl_berkas' => $this->input->post('tgl_berkas', true),
+                    'pesan' => $this->input->post('pesan', true),
+                    'sess_id' => $sess_id,
+                    'status_berkas' => 1,
+                    'jenis_surat' => $this->input->post('jenis_surat'),
+                    'perihal' => $this->input->post('perihal'),
+                    'tembusan' => $this->input->post('tembusan'),
+                    'sifat' => $this->input->post('sifat'),
+                    'lampiran' => $this->input->post('lampiran'),
+                    'id_template' => $this->input->post('template'),
+                    //'ttd'=>$ttd['file_name'],
+                    'nama_penerima' => $this->input->post('nama_penerima'),
+                    'nip_penerima' => $this->input->post('nip_penerima'),
+                    'jabatan' => $this->input->post('jabatan'),
+                    'pangkat' => $this->input->post('pangkat')
+
+                );
+            } else {
+                //$upload_file = $_FILES['file']['name'];
+
+
+                $config['allowed_types'] = 'xls|xlsx|doc|docx|ppt|pptx|pdf|zip|rar|txt';
+                $config['max_size'] = 100048;
+                $config['upload_path'] = './assets/files';
+                // $config['max_width']            = 2048;
+                // $config['max_height']           = 2048;
+
+                $this->load->library('upload', $config);
+
+                $this->upload->do_upload('fileku');
+                $file = $this->upload->data();
+                $sess_id = $this->session->userdata('id');
+                $data = array(
+                    'kd_berkas' => $this->input->post('kd_berkas', true),
+                    'tuj_berkas' => $this->input->post('tuj_berkas', true),
+                    'nama_berkas' => $this->input->post('nama_berkas', true),
+                    'tgl_berkas' => $this->input->post('tgl_berkas', true),
+                    'pesan' => $this->input->post('pesan', true),
+                    'sess_id' => $sess_id,
+                    'status_berkas' => 1,
+                    'file_upload' => $file['file_name'],
+                    'jenis_surat' => $this->input->post('jenis_surat'),
+                    'perihal' => $this->input->post('perihal'),
+                    'tembusan' => $this->input->post('tembusan'),
+                    'sifat' => $this->input->post('sifat'),
+                    'lampiran' => $this->input->post('lampiran'),
+                    'id_template' => $this->input->post('template'),
+                    //'ttd'=>$ttd['file_name'],
+                    'nama_penerima' => $this->input->post('nama_penerima'),
+                    'nip_penerima' => $this->input->post('nip_penerima'),
+                    'jabatan' => $this->input->post('jabatan'),
+                    'pangkat' => $this->input->post('pangkat')
+                );
+
+                // } else {
+                // $this->session->set_flashdata('msg', '<div class="alert alert-danger font-weight-bolder" role="alert">UPLOAD GAGAL !..  Ekstensi File Salah / Ukuran file tidak boleh dari 2 mb</div>');
+                // redirect('user/index');
+                // }
 
             }
-             $this->db->insert('tb_berkas', $data);
-                    $this->session->set_flashdata('message', 'Simpan berkas');
-                    //redirect('user/list_berkas');
-          //  } else {
-                //$this->session->set_flashdata('msg', '<div class="alert alert-danger font-weight-bolder" role="alert">UPLOAD GAGAL !..  File Upload harus disertakan </div>');
-              //  redirect('user/index');
+            $this->db->insert('tb_berkas', $data);
+            $this->session->set_flashdata('message', 'Simpan berkas');
+            //redirect('user/list_berkas');
+            //  } else {
+            //$this->session->set_flashdata('msg', '<div class="alert alert-danger font-weight-bolder" role="alert">UPLOAD GAGAL !..  File Upload harus disertakan </div>');
+            //  redirect('user/index');
             //}
         }
     }
@@ -334,13 +339,13 @@ class User extends CI_Controller
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Daftar Berkas';
             $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-           
-                 $data['berkas'] = $this->db
 
-                 ->join('mst_divisi','tb_berkas.tuj_berkas=mst_divisi.id_divisi')
-                 ->get_where('tb_berkas', ['sess_id' => $this->session->userdata('id')])->result_array();
-           
-           // $data['berkas'] = $this->db->get_where('tb_berkas', ['sess_id' => $this->session->userdata('id')])->result_array();
+            $data['berkas'] = $this->db
+
+                ->join('mst_divisi', 'tb_berkas.tuj_berkas=mst_divisi.id_divisi')
+                ->get_where('tb_berkas', ['sess_id' => $this->session->userdata('id')])->result_array();
+
+            // $data['berkas'] = $this->db->get_where('tb_berkas', ['sess_id' => $this->session->userdata('id')])->result_array();
             $data['mst_divisi'] = $this->db->get('mst_divisi')->result_array();
 
             $this->load->view('templates/header', $data);
@@ -348,7 +353,6 @@ class User extends CI_Controller
             $this->load->view('templates/navbar', $data);
             $this->load->view('user/list_berkas', $data);
             $this->load->view('templates/footer');
-
         } else {
             $upload_image = $_FILES['file']['name'];
             if ($upload_image) {
@@ -389,7 +393,6 @@ class User extends CI_Controller
     public function get_berkas()
     {
         echo json_encode($this->user->getEditBerkas($_POST['id_berkas']));
-        
     }
 
     public function kirim_berkas()
@@ -399,14 +402,14 @@ class User extends CI_Controller
         $this->db->set('status_berkas', $status_berkas);
         $this->db->where('id_berkas', $id_berkas);
         $this->db->update('tb_berkas');
-        $data=[
-            'id_divisi'=>$this->input->post('id_divisi'),
-            'pesan'=>'Ada Berkas Baru Masuk',
-            'id_berkas'=>$this->input->post('id_berkas')
+        $data = [
+            'id_divisi' => $this->input->post('id_divisi'),
+            'pesan' => 'Ada Berkas Baru Masuk',
+            'id_berkas' => $this->input->post('id_berkas')
 
 
         ];
-        $this->db->insert('tb_notif',$data);
+        $this->db->insert('tb_notif', $data);
         $this->session->set_flashdata('message', 'Kirim berkas');
         redirect('user/list_berkas');
     }
@@ -454,26 +457,24 @@ class User extends CI_Controller
     {
         $data['title'] = 'Berkas Masuk';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-           $uri=$this->uri->segment(3);
-            if (isset($uri)) {
-                $this->db->where('id_notif',$this->uri->segment(4));
-                $this->db->update('tb_notif',['status_baca'=>1]);
-        $data['divisi_nm'] = $this->user->getDivisiName();
-        $divisi_nm = $this->user->getDivisiName();
+        $uri = $this->uri->segment(3);
+        if (isset($uri)) {
+            $this->db->where('id_notif', $this->uri->segment(4));
+            $this->db->update('tb_notif', ['status_baca' => 1]);
+            $data['divisi_nm'] = $this->user->getDivisiName();
+            $divisi_nm = $this->user->getDivisiName();
 
-        $data['berkas_masuk'] = $this->db
+            $data['berkas_masuk'] = $this->db
 
-        ->join('mst_divisi','tb_berkas.tuj_berkas=mst_divisi.id_divisi')
-         ->join('tb_struktural', 'tb_berkas.sess_id = tb_struktural.user_id')
-        ->get_where('tb_berkas',['id_berkas'=>$uri])->result_array();
+                ->join('mst_divisi', 'tb_berkas.tuj_berkas=mst_divisi.id_divisi')
+                ->join('tb_struktural', 'tb_berkas.sess_id = tb_struktural.user_id')
+                ->get_where('tb_berkas', ['id_berkas' => $uri])->result_array();
+        } else {
+            $data['divisi_nm'] = $this->user->getDivisiName();
+            $divisi_nm = $this->user->getDivisiName();
 
-    }else{
- $data['divisi_nm'] = $this->user->getDivisiName();
-        $divisi_nm = $this->user->getDivisiName();
-
-        $data['berkas_masuk'] = $this->user->getBerkasMasuk($divisi_nm);
-
-    }
+            $data['berkas_masuk'] = $this->user->getBerkasMasuk($divisi_nm);
+        }
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar_user', $data);
@@ -482,280 +483,272 @@ class User extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    function cetak_surat(){
-        $id=$this->uri->segment(3);
-        $template=$this->uri->segment(4);
-        $data['surat']=$this->db
+    function cetak_surat()
+    {
+        $id = $this->uri->segment(3);
+        $template = $this->uri->segment(4);
+        $data['surat'] = $this->db
 
-        ->join('mst_divisi','tb_berkas.tuj_berkas=mst_divisi.id_divisi')
-         ->join('mst_jabatan','mst_divisi.id_divisi=mst_jabatan.id_divisi')
-        ->get_where('tb_berkas',['id_berkas'=>$id])->row_array();
-      //  $mpdf = new \Mpdf\Mpdf();
-      //  $html = $this->load->view('template_surat/surat',$data,true);
-       // $mpdf->WriteHTML($html);
-       // $mpdf->Output();
-        if ($template==1) {
-             $this->load->view('template_surat/surat_2',$data);
-        }else if($template==2){
+            ->join('mst_divisi', 'tb_berkas.tuj_berkas=mst_divisi.id_divisi')
+            ->join('mst_jabatan', 'mst_divisi.id_divisi=mst_jabatan.id_divisi')
+            ->get_where('tb_berkas', ['id_berkas' => $id])->row_array();
+        //  $mpdf = new \Mpdf\Mpdf();
+        //  $html = $this->load->view('template_surat/surat',$data,true);
+        // $mpdf->WriteHTML($html);
+        // $mpdf->Output();
+        if ($template == 1) {
+            $this->load->view('template_surat/surat_2', $data);
+        } else if ($template == 2) {
 
- $this->load->view('template_surat/surat',$data);
-        }else if($template==3){
+            $this->load->view('template_surat/surat', $data);
+        } else if ($template == 3) {
 
-         $this->load->view('template_surat/surat_3',$data);   
+            $this->load->view('template_surat/surat_3', $data);
         }
-       
-
-
     }
-    function report_chart(){
- $data['title'] = 'Report';
+    function report_chart()
+    {
+        $data['title'] = 'Report';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['jenis']=$this->db->get('mst_surat')->result();
-if (isset($_POST['cari'])) {
-    # code...
-$id=$this->session->userdata('id');
-        $data['count']=$this->db
-       
-        ->group_by('tgl_berkas')
-        ->where('sess_id',$id)
-      ->where('status_berkas',0)
-        ->where('tgl_berkas BETWEEN"'.$_POST['periode_awal'].'" and "'.$_POST['periode_akhir'].'"')
-          ->where('jenis_surat',$_POST['jenis'])
-         ->select('count(*) as jumlah')
-        ->get('tb_berkas')->result();
-        $data['grafik']=$this->db
-        ->select('tgl_berkas')
-       // ->group_by('tgl_berkas')
-         ->where('status_berkas',0)
-          ->where('sess_id',$id)
-         ->where('jenis_surat',$_POST['jenis'])
-        ->where('tgl_berkas BETWEEN"'.$_POST['periode_awal'].'" and "'.$_POST['periode_akhir'].'"')
-        ->get('tb_berkas')->result();
-}
-         $this->load->view('templates/header', $data);
+        $data['jenis'] = $this->db->get('mst_surat')->result();
+        if (isset($_POST['cari'])) {
+            # code...
+            $id = $this->session->userdata('id');
+            $data['count'] = $this->db
+
+                ->group_by('tgl_berkas')
+                ->where('sess_id', $id)
+                ->where('status_berkas', 0)
+                ->where('tgl_berkas BETWEEN"' . $_POST['periode_awal'] . '" and "' . $_POST['periode_akhir'] . '"')
+                ->where('jenis_surat', $_POST['jenis'])
+                ->select('count(*) as jumlah')
+                ->get('tb_berkas')->result();
+            $data['grafik'] = $this->db
+                ->select('tgl_berkas')
+                // ->group_by('tgl_berkas')
+                ->where('status_berkas', 0)
+                ->where('sess_id', $id)
+                ->where('jenis_surat', $_POST['jenis'])
+                ->where('tgl_berkas BETWEEN"' . $_POST['periode_awal'] . '" and "' . $_POST['periode_akhir'] . '"')
+                ->get('tb_berkas')->result();
+        }
+        $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar_user', $data);
         $this->load->view('templates/navbar', $data);
         $this->load->view('grafik_batang', $data);
- $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
 
-    function keluar_bulan(){
-         $data['title'] = 'Report';
+    function keluar_bulan()
+    {
+        $data['title'] = 'Report';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['jenis']=$this->db->get('mst_surat')->result();
-        $id=$this->session->userdata('id');
-$bulan=$_POST['bulan'];
-$jenis=$this->input->post('jenis');
-$data['count']=$this->db->query("select count(*) as jumlah from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
-$data['grafik']=$this->db->query("select * from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
- $this->load->view('templates/header', $data);
+        $data['jenis'] = $this->db->get('mst_surat')->result();
+        $id = $this->session->userdata('id');
+        $bulan = $_POST['bulan'];
+        $jenis = $this->input->post('jenis');
+        $data['count'] = $this->db->query("select count(*) as jumlah from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
+        $data['grafik'] = $this->db->query("select * from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
+        $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar_user', $data);
         $this->load->view('templates/navbar', $data);
         $this->load->view('grafik_batang', $data);
- $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
-    function surat_masukperiode(){
-$data['title'] = 'Report';
+    function surat_masukperiode()
+    {
+        $data['title'] = 'Report';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['jenis']=$this->db->get('mst_surat')->result();
-if (isset($_POST['cari'])) {
-    # code...
-$id=$this->session->userdata('id');
-        $data['count']=$this->db
-       
-        ->group_by('tgl_berkas')
-        ->where('sess_id !=',$id)
-      ->where('status_berkas',0)
-        ->where('tgl_berkas BETWEEN"'.$_POST['periode_awal'].'" and "'.$_POST['periode_akhir'].'"')
-          ->where('jenis_surat',$_POST['jenis'])
-         ->select('count(*) as jumlah')
-        ->get('tb_berkas')->result();
-        $data['grafik']=$this->db
-        ->select('tgl_berkas')
-       // ->group_by('tgl_berkas')
-         ->where('status_berkas',0)
-          ->where('sess_id !=',$id)
-         ->where('jenis_surat',$_POST['jenis'])
-        ->where('tgl_berkas BETWEEN"'.$_POST['periode_awal'].'" and "'.$_POST['periode_akhir'].'"')
-        ->get('tb_berkas')->result();
-}
-         $this->load->view('templates/header', $data);
+        $data['jenis'] = $this->db->get('mst_surat')->result();
+        if (isset($_POST['cari'])) {
+            # code...
+            $id = $this->session->userdata('id');
+            $data['count'] = $this->db
+
+                ->group_by('tgl_berkas')
+                ->where('sess_id !=', $id)
+                ->where('status_berkas', 0)
+                ->where('tgl_berkas BETWEEN"' . $_POST['periode_awal'] . '" and "' . $_POST['periode_akhir'] . '"')
+                ->where('jenis_surat', $_POST['jenis'])
+                ->select('count(*) as jumlah')
+                ->get('tb_berkas')->result();
+            $data['grafik'] = $this->db
+                ->select('tgl_berkas')
+                // ->group_by('tgl_berkas')
+                ->where('status_berkas', 0)
+                ->where('sess_id !=', $id)
+                ->where('jenis_surat', $_POST['jenis'])
+                ->where('tgl_berkas BETWEEN"' . $_POST['periode_awal'] . '" and "' . $_POST['periode_akhir'] . '"')
+                ->get('tb_berkas')->result();
+        }
+        $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar_user', $data);
         $this->load->view('templates/navbar', $data);
         $this->load->view('grafik_suratmasuk', $data);
- $this->load->view('templates/footer');
-
+        $this->load->view('templates/footer');
     }
 
-    function masuk_bulan(){
-         $data['title'] = 'Report';
+    function masuk_bulan()
+    {
+        $data['title'] = 'Report';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $data['jenis']=$this->db->get('mst_surat')->result();
-        $id=$this->session->userdata('id');
-        $jenis=$this->input->post('jenis');
-$bulan=$_POST['bulan'];
-$data['count']=$this->db->query("select count(*) as jumlah from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id !='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
-$data['grafik']=$this->db->query("select * from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id !='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
- $this->load->view('templates/header', $data);
+        $data['jenis'] = $this->db->get('mst_surat')->result();
+        $id = $this->session->userdata('id');
+        $jenis = $this->input->post('jenis');
+        $bulan = $_POST['bulan'];
+        $data['count'] = $this->db->query("select count(*) as jumlah from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id !='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
+        $data['grafik'] = $this->db->query("select * from tb_berkas where month(tgl_berkas)='$bulan' and status_berkas=0 and sess_id !='$id' and jenis_surat='$jenis' group by tgl_berkas")->result();
+        $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar_user', $data);
         $this->load->view('templates/navbar', $data);
         $this->load->view('grafik_suratmasuk', $data);
- $this->load->view('templates/footer');
+        $this->load->view('templates/footer');
     }
 
-    function grafik_line(){
+    function grafik_line()
+    {
 
-if (isset($_POST['cari'])) {
-     $id=$this->session->userdata('id');
+        if (isset($_POST['cari'])) {
+            $id = $this->session->userdata('id');
 
-      $tahun=$_POST['tahun'];
-$data['count']=$this->db->query("select count(*) as jumlah from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id ='$id'  group by year(tgl_berkas)")->result();
-$data['grafik']=$this->db->query("select * from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id ='$id'  group by year(tgl_berkas)")->result();
- $data['title'] = 'Report';
+            $tahun = $_POST['tahun'];
+            $data['count'] = $this->db->query("select count(*) as jumlah from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id ='$id'  group by year(tgl_berkas)")->result();
+            $data['grafik'] = $this->db->query("select * from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id ='$id'  group by year(tgl_berkas)")->result();
+            $data['title'] = 'Report';
+            $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar_user', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('grafik_line', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data['title'] = 'Report';
+            $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar_user', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('grafik_line', $data);
+            $this->load->view('templates/footer');
+        }
+    }
+
+    function grafik_line_masuk()
+    {
+
+        if (isset($_POST['cari'])) {
+            $id = $this->session->userdata('id');
+
+            $tahun = $_POST['tahun'];
+            $data['count'] = $this->db->query("select count(*) as jumlah from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id !='$id'  group by year(tgl_berkas)")->result();
+            $data['grafik'] = $this->db->query("select * from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id !='$id'  group by year(tgl_berkas)")->result();
+            $data['title'] = 'Report';
+            $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar_user', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('grafikline_masuk', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data['title'] = 'Report';
+            $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar_user', $data);
+            $this->load->view('templates/navbar', $data);
+            $this->load->view('grafikline_masuk', $data);
+            $this->load->view('templates/footer');
+        }
+    }
+
+
+    function chat_index()
+    {
+
+        $data['title'] = 'Chatting';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar_user', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('grafik_line', $data);
- $this->load->view('templates/footer');
-
-}else{
-        $data['title'] = 'Report';
-        $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar_user', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('grafik_line', $data);
- $this->load->view('templates/footer');
-
-
-    }
-
-
-    }
-
-     function grafik_line_masuk(){
-
-if (isset($_POST['cari'])) {
-     $id=$this->session->userdata('id');
-
-      $tahun=$_POST['tahun'];
-$data['count']=$this->db->query("select count(*) as jumlah from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id !='$id'  group by year(tgl_berkas)")->result();
-$data['grafik']=$this->db->query("select * from tb_berkas where year(tgl_berkas)='$tahun' and status_berkas=0 and sess_id !='$id'  group by year(tgl_berkas)")->result();
- $data['title'] = 'Report';
-        $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar_user', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('grafikline_masuk', $data);
- $this->load->view('templates/footer');
-
-}else{
-        $data['title'] = 'Report';
-        $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar_user', $data);
-        $this->load->view('templates/navbar', $data);
-        $this->load->view('grafikline_masuk', $data);
- $this->load->view('templates/footer');
-
-
-    }
-
-
-    }
-
-
-    function chat_index(){
-
-              $data['title'] = 'Chatting';
-               $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-               $data['divisi']=$this->db->get('mst_divisi')->result();
-               $div=$this->session->userdata('divisi');
-               $notif=$id=$this->uri->segment(3);
-               if (isset($notif)) {
-                $update=$this->db->query("update tb_notif_chat set status_baca=1 where hash='$notif'");
-                    $data['chat']=$this->db
-                ->join('mst_divisi','tb_chat.id_divisi=mst_divisi.id_divisi')
+        $data['divisi'] = $this->db->get('mst_divisi')->result();
+        $div = $this->session->userdata('divisi');
+        $notif = $id = $this->uri->segment(3);
+        if (isset($notif)) {
+            $update = $this->db->query("update tb_notif_chat set status_baca=1 where hash='$notif'");
+            $data['chat'] = $this->db
+                ->join('mst_divisi', 'tb_chat.id_divisi=mst_divisi.id_divisi')
                 ->group_by('hash')
-                ->order_by('id_chat','desc')
-               ->get_where('tb_chat',['tb_chat.hash'=>$notif])->result();
-               }else{
-               $data['chat']=$this->db
-                ->join('mst_divisi','tb_chat.id_divisi=mst_divisi.id_divisi')
+                ->order_by('id_chat', 'desc')
+                ->get_where('tb_chat', ['tb_chat.hash' => $notif])->result();
+        } else {
+            $data['chat'] = $this->db
+                ->join('mst_divisi', 'tb_chat.id_divisi=mst_divisi.id_divisi')
                 ->group_by('hash')
-                ->order_by('id_chat','desc')
-               ->get_where('tb_chat',['tb_chat.id_divisi'=>$div])->result();
-
-           }
-  $this->load->view('templates/header', $data);
+                ->order_by('id_chat', 'desc')
+                ->get_where('tb_chat', ['tb_chat.id_divisi' => $div])->result();
+        }
+        $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar_user', $data);
         $this->load->view('templates/navbar', $data);
         $this->load->view('user/pesan', $data);
         $this->load->view('templates/footer');
-
     }
-    function save_chat(){
-         //$data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-$divisi=$this->input->post('divisi');
-$isi=$this->input->post('isi');
-$hash=$this->input->post('hash');
-$data=[
-'id_divisi'=>$divisi,
-'pesan'=>$isi,
-'hash'=>$this->input->post('hash')
+    function save_chat()
+    {
+        //$data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
+        $divisi = $this->input->post('divisi');
+        $isi = $this->input->post('isi');
+        $hash = $this->input->post('hash');
+        $data = [
+            'id_divisi' => $divisi,
+            'pesan' => $isi,
+            'hash' => $this->input->post('hash')
 
-];
-$notif=[
-'hash'=>$this->input->post('hash'),
-'id_divisi'=>$divisi,
-'pesan'=>$isi
+        ];
+        $notif = [
+            'hash' => $this->input->post('hash'),
+            'id_divisi' => $divisi,
+            'pesan' => $isi
 
-];
-$this->db->insert('tb_notif_chat',$notif);
-$this->db->insert('tb_chat',$data);
-if ($this->db->affected_rows() >0) {
-    $query=$this->db
-    ->join('mst_divisi','tb_chat.id_divisi=mst_divisi.id_divisi')
-    ->get_where('tb_chat',['tb_chat.id_divisi'=>$divisi,'hash'=>$hash])->result();
-   
-    echo json_encode($query);
+        ];
+        $this->db->insert('tb_notif_chat', $notif);
+        $this->db->insert('tb_chat', $data);
+        if ($this->db->affected_rows() > 0) {
+            $query = $this->db
+                ->join('mst_divisi', 'tb_chat.id_divisi=mst_divisi.id_divisi')
+                ->get_where('tb_chat', ['tb_chat.id_divisi' => $divisi, 'hash' => $hash])->result();
 
-}
-        
+            echo json_encode($query);
         }
+    }
 
 
-        function detail_chat(){
+    function detail_chat()
+    {
 
-            $hash=$this->input->post('hash_id');
-            $query=$this->db
-    ->join('mst_divisi','tb_chat.id_divisi=mst_divisi.id_divisi')
-    ->get_where('tb_chat',['hash'=>$hash])->result();
-   
-    echo json_encode($query);
+        $hash = $this->input->post('hash_id');
+        $query = $this->db
+            ->join('mst_divisi', 'tb_chat.id_divisi=mst_divisi.id_divisi')
+            ->get_where('tb_chat', ['hash' => $hash])->result();
 
-        }
+        echo json_encode($query);
+    }
 
 
-        function get_chat(){
- //$data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
-            $divisi=$this->input->post('divisi');
-            $query=$this->db
-            ->join('mst_divisi','tb_chat.id_divisi=mst_divisi.id_divisi')
+    function get_chat()
+    {
+        //$data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
+        $divisi = $this->input->post('divisi');
+        $query = $this->db
+            ->join('mst_divisi', 'tb_chat.id_divisi=mst_divisi.id_divisi')
             ->group_by('tb_chat.id_divisi')
-            ->get_where('tb_chat',['tb_chat.id_divisi'=>$divisi])->result();
-            foreach ($query as $tampil) {
-                echo '<div class="chat_list"><div class="chat_people"><div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div><div class="chat_ib"><h5>'.$tampil->nama_divisi.' <span class="chat_date">Dec 25</span></h5><p>'.$tampil->pesan.'</p></div></div></div>';
-            }
+            ->get_where('tb_chat', ['tb_chat.id_divisi' => $divisi])->result();
+        foreach ($query as $tampil) {
+            echo '<div class="chat_list"><div class="chat_people"><div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div><div class="chat_ib"><h5>' . $tampil->nama_divisi . ' <span class="chat_date">Dec 25</span></h5><p>' . $tampil->pesan . '</p></div></div></div>';
         }
+    }
 
-        fUnction cek_divisi(){
+    function cek_divisi()
+    {
 
-            $kontak=$this->input->post('kontak');
-        $sql=$this->db->get_where("mst_divisi",['id_divisi'=>$kontak])->row_array();
+        $kontak = $this->input->post('kontak');
+        $sql = $this->db->get_where("mst_divisi", ['id_divisi' => $kontak])->row_array();
         echo json_encode($sql);
-        }
-    
+    }
 }
