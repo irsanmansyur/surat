@@ -14,7 +14,7 @@
                             foreach ($jenis as $tampil) {
                                 # code...
                             ?>
-                                <option value="<?= $tampil->jenis_surat ?>" <?= set_value('jenis') == $tampil->jenis_surat ? "selected" : "" ?>><?= $tampil->jenis_surat ?></option>
+                                <option value="<?= $tampil->id_surat ?>" <?= set_value('jenis') == $tampil->id_surat ? "selected" : "" ?>><?= $tampil->jenis_surat ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -73,7 +73,7 @@
                             foreach ($jenis as $tampil) {
                                 # code...
                             ?>
-                                <option value="<?= $tampil->jenis_surat ?>" <?= set_value('jenis') == $tampil->jenis_surat ? "selected" : "" ?>><?= $tampil->jenis_surat ?></option>
+                                <option value="<?= $tampil->id_surat ?>" <?= set_value('jenis') == $tampil->id_surat ? "selected" : "" ?>><?= $tampil->jenis_surat ?></option>
                             <?php } ?>
                         </select>
                     </div>

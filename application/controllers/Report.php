@@ -16,30 +16,28 @@ class Report extends CI_Controller
     }
     function surat_keluar()
     {
-        $tbSuratKeluar = $this->db->get_where("tb_berkas", ["jenis_surat !=" => "1"]);
 
         $this->load->library("form_validation");
         $data['title'] = 'Report';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
 
 
-        $this->db->select("mst_surat.*, COUNT(tb_berkas.id_berkas) AS jumlah, tb_berkas.tgl_berkas");
-        $this->db->from("mst_surat");
-        $this->db->join("tb_berkas", "tb_berkas.id_berkas=mst_surat.berkas_id");
-        $this->db->where("kategori_surat", "Surat Keluar");
+        $this->db->select("COUNT(tb_berkas.id_berkas) AS jumlah, tb_berkas.tgl_berkas");
+        $this->db->from("tb_berkas");
+        $this->db->where(["jenis_surat !=" => "1"]);
 
         $this->form_validation->set_rules("periode_awal", "Tgl awal", "required");
         $this->form_validation->set_rules("periode_akhir", "Tgl Akhir", "required");
 
         if ($this->form_validation->run()) {
-            $this->db->where('mst_surat.jenis_surat', $this->input->post('jenis'));
+            $this->db->where('jenis_surat', $this->input->post('jenis'));
             $this->db->where('tgl_berkas >=', $this->input->post("periode_awal"));
             $this->db->where('tgl_berkas <=', $this->input->post("periode_akhir"));
         }
 
         if (isset($_POST['cari_bulan'])) {
             $this->form_validation->reset_validation();
-            $this->db->where('mst_surat.jenis_surat', $this->input->post('jenis'));
+            $this->db->where('jenis_surat', $this->input->post('jenis'));
             $this->db->where("month(tgl_berkas)", $this->input->post("bulan"));
         }
 
@@ -68,14 +66,15 @@ class Report extends CI_Controller
         $this->form_validation->set_rules("periode_akhir", "Tgl Akhir", "required");
 
         if ($this->form_validation->run()) {
-            $this->db->where('mst_surat.jenis_surat', $this->input->post('jenis'));
+            $this->db->where('jenis_surat', $this->input->post('jenis'));
             $this->db->where('tgl_berkas >=', $this->input->post("periode_awal"));
             $this->db->where('tgl_berkas <=', $this->input->post("periode_akhir"));
         }
 
         if (isset($_POST['cari_bulan'])) {
-            $this->db->where('mst_surat.jenis_surat', $this->input->post('jenis'));
+            $this->form_validation->reset_validation();
             $this->db->where("month(tgl_berkas)", $this->input->post("bulan"));
+            $this->db->where('jenis_surat', $this->input->post('jenis'));
         }
 
         $this->db->group_by("tb_berkas.tgl_berkas");
