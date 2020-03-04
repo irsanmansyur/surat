@@ -12,6 +12,7 @@ class User extends CI_Controller
         is_user();
         $this->load->helper('tglindo');
         $this->load->model('User_model', 'user');
+        $this->sess_id = $this->session->userdata('id');
     }
 
     public function index()
@@ -23,11 +24,11 @@ class User extends CI_Controller
             $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
 
 
-            $tbSuratMasuk = $this->db->get_where("mst_surat", ["kategori_surat" => "Surat Keluar"]);
-            $data['total_surat_keluar'] = $tbSuratMasuk->num_rows();
-
-            $tbSuratKeluar = $this->db->get_where("mst_surat", ["kategori_surat" => "Surat Masuk"]);
+            $tbSuratMasuk = $this->db->get_where("tb_berkas", ["jenis_surat" => "1", "sess_id" => $this->sess_id]);
             $data['total_surat_masuk'] = $tbSuratMasuk->num_rows();
+
+            $tbSuratKeluar = $this->db->get_where("tb_berkas", ["jenis_surat !=" => "1", "sess_id" => $this->sess_id]);
+            $data['total_surat_keluar'] = $tbSuratKeluar->num_rows();
 
             $data['kirim_berkas'] = $this->user->countKirimBerkas();
             $data['total_berkas'] = $this->user->countTotalBerkas();

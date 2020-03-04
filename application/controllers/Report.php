@@ -16,6 +16,8 @@ class Report extends CI_Controller
     }
     function surat_keluar()
     {
+        $tbSuratKeluar = $this->db->get_where("tb_berkas", ["jenis_surat !=" => "1"]);
+
         $this->load->library("form_validation");
         $data['title'] = 'Report';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
@@ -53,14 +55,14 @@ class Report extends CI_Controller
     function surat_masuk()
     {
         $this->load->library("form_validation");
+
         $data['title'] = 'Report Surat Masuk';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
 
 
-        $this->db->select("mst_surat.*, COUNT(tb_berkas.id_berkas) AS jumlah, tb_berkas.tgl_berkas");
-        $this->db->from("mst_surat");
-        $this->db->join("tb_berkas", "tb_berkas.id_berkas=mst_surat.berkas_id");
-        $this->db->where("kategori_surat", "Surat Masuk");
+        $this->db->select("COUNT(tb_berkas.id_berkas) AS jumlah, tb_berkas.tgl_berkas");
+        $this->db->from("tb_berkas");
+        $this->db->where(["jenis_surat" => "1"]);
 
         $this->form_validation->set_rules("periode_awal", "Tgl awal", "required");
         $this->form_validation->set_rules("periode_akhir", "Tgl Akhir", "required");
@@ -87,14 +89,14 @@ class Report extends CI_Controller
     }
     function grafik_line_surat_masuk()
     {
+
         $data['title'] = 'Report Grafik Line Surat Masuk';
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
 
 
-        $this->db->select("mst_surat.*, COUNT(tb_berkas.id_berkas) AS jumlah, month(tb_berkas.tgl_berkas) AS month");
-        $this->db->from("mst_surat");
-        $this->db->join("tb_berkas", "tb_berkas.id_berkas=mst_surat.berkas_id");
-        $this->db->where("kategori_surat", "Surat Masuk");
+        $this->db->select("COUNT(tb_berkas.id_berkas) AS jumlah, month(tb_berkas.tgl_berkas) AS month");
+        $this->db->from("tb_berkas");
+        $this->db->where(["jenis_surat" => "1"]);
 
         if (isset($_POST['cari'])) {
             $this->db->where("year(tgl_berkas)", $this->input->post("tahun"));
@@ -117,10 +119,9 @@ class Report extends CI_Controller
         $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
 
 
-        $this->db->select("mst_surat.*, COUNT(tb_berkas.id_berkas) AS jumlah, month(tb_berkas.tgl_berkas) AS month");
-        $this->db->from("mst_surat");
-        $this->db->join("tb_berkas", "tb_berkas.id_berkas=mst_surat.berkas_id");
-        $this->db->where("kategori_surat", "Surat Keluar");
+        $this->db->select("COUNT(tb_berkas.id_berkas) AS jumlah, month(tb_berkas.tgl_berkas) AS month");
+        $this->db->from("tb_berkas");
+        $this->db->where("jenis_surat !=", "1");
 
         if (isset($_POST['cari'])) {
             $this->db->where("year(tgl_berkas)", $this->input->post("tahun"));
