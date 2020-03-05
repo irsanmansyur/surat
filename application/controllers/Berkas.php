@@ -42,26 +42,26 @@ class Berkas extends CI_Controller
       $this->load->view('user/index', $data);
       $this->load->view('templates/footer');
     } else {
-      $config['allowed_types'] = 'xls|xlsx|doc|docx|ppt|pptx|pdf|zip|rar|txt|jpg|png|gif|jpeg';
-      $config['max_size'] = 100048;
-      $config['upload_path'] = './assets/files';
-      // $config['max_width']            = 2048;
-      // $config['max_height']           = 2048;
+      $file = '';
+      if ($_FILES['fileku']['name']) {
+        $config['allowed_types'] = 'xls|xlsx|doc|docx|ppt|pptx|pdf|zip|rar|txt';
+        $config['max_size'] = 100048;
+        $config['upload_path'] = './assets/files';
+        // $config['max_width']            = 2048;
+        // $config['max_height']           = 2048;
+        $this->load->library('upload', $config);
+        $this->upload->do_upload('fileku');
+        $file = $this->upload->data()['file_name'];
+      }
 
-      $this->load->library('upload', $config);
+      // ttd
+      $config1['allowed_types'] = 'jpeg|jpg|png';
+      $config1['max_size'] = 100048;
+      $config1['upload_path'] = './assets/files';
+      $config['max_width']            = 3048;
+      $config['max_height']           = 2048;
 
-      $this->upload->do_upload('fileku');
-      $file = $this->upload->data();
-
-
-      //ttd
-      //  $config1['allowed_types']='jpeg|jpg|png';
-      // $config1['max_size']=100048;
-      //$config1['upload_path']='./assets/files';
-      // $config['max_width']            = 3048;
-      // $config['max_height']           = 2048;
-
-      //$this->load->library('upload', $config1);
+      $this->load->library('upload', $config1);
 
       $this->upload->do_upload('ttd');
       $ttd = $this->upload->data();
@@ -74,7 +74,7 @@ class Berkas extends CI_Controller
         'pesan' => $this->input->post('pesan', true),
         'sess_id' => $sess_id,
         'status_berkas' => 1,
-        'file_upload' => $file['file_name'],
+        'file_upload' => $file,
         'jenis_surat' => $this->input->post('jenis_surat'),
         'perihal' => $this->input->post('perihal'),
         'tembusan' => $this->input->post('tembusan'),

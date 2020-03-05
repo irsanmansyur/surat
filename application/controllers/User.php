@@ -24,13 +24,38 @@ class User extends CI_Controller
             $data['user'] = $this->db->get_where('mst_user', ['username' => $this->session->userdata('username')])->row_array();
 
 
-            $tbSuratMasuk = $this->db->get_where("tb_berkas", ["jenis_surat" => "1", "sess_id" => $this->sess_id]);
+            $this->db->select("tb_berkas.*");
+            $this->db->from("tb_berkas");
+            $this->db->join("tb_struktural", "tb_struktural.jabatan_nm=tb_berkas.tuj_berkas");
+            $this->db->where(
+                [
+                    // "tb_berkas.jenis_surat" => "1",
+                    "status_berkas" => "0",
+                    "tb_struktural.user_id" => $this->sess_id
+                ]
+            );
+            $tbSuratMasuk = $this->db->get();
+
             $data['total_surat_masuk'] = $tbSuratMasuk->num_rows();
 
-            $tbSuratKeluar = $this->db->get_where("tb_berkas", ["jenis_surat !=" => "1", "sess_id" => $this->sess_id]);
+            $this->db->select("tb_berkas.*");
+            $this->db->from("tb_berkas");
+            $this->db->join("tb_struktural", "tb_struktural.jabatan_nm=tb_berkas.tuj_berkas");
+            $this->db->where(
+                ["tb_berkas.jenis_surat !=" => "1", "status_berkas" => "0", "sess_id" => $this->sess_id]
+            );
+            $tbSuratKeluar = $this->db->get();
             $data['total_surat_keluar'] = $tbSuratKeluar->num_rows();
 
-            $data['kirim_berkas'] = $this->user->countKirimBerkas();
+            // $data['kirim_berkas'] = $this->user->countKirimBerkas();
+            $this->db->select("tb_berkas.*");
+            $this->db->from("tb_berkas");
+            $this->db->join("tb_struktural", "tb_struktural.jabatan_nm=tb_berkas.tuj_berkas");
+            $this->db->where(
+                ["tb_berkas.jenis_surat !=" => "1", "file_upload !=" => "", "status_berkas" => "0", "sess_id" => $this->sess_id]
+            );
+            $data['kirim_berkas'] = $this->db->get()->num_rows();
+
             $data['total_berkas'] = $this->user->countTotalBerkas();
             $data['kd_surat'] = $this->user->getKdSurat();
             $data['kd_berkas'] = $this->user->getKdBerkas();
